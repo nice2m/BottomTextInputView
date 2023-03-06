@@ -1,0 +1,6 @@
+framework module Pods_BottomInputView {
+  umbrella header "Pods-BottomInputView-umbrella.h"
+
+  export *
+  module * { export * }
+}
