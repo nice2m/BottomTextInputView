@@ -21,7 +21,7 @@ class ViewController: UIViewController {
         testView?.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
             make.bottom.equalTo(self.view.safeAreaLayoutGuide)
-        }        
+        }
     }
     
 }
