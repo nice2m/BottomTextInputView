@@ -20,27 +20,16 @@ class ViewController: UIViewController {
         view.addSubview(testView!)
         testView?.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
-            make.bottom.equalToSuperview().inset(60)
+            make.bottom.equalTo(self.view.safeAreaLayoutGuide)
         }        
     }
     
 }
 
 
-
 extension ViewController: BottomTextInputViewDelegate{
     func inputViewKeyboardOn(show: Bool) {
-        
-        if (!show){
-            UIView.animate(withDuration: 0.25) {
-                self.testView?.snp.updateConstraints({ make in
-                    make.bottom.equalToSuperview().inset(60)
-                    self.view.layoutIfNeeded()
-                })
-            } completion: { finished in
-                print(finished)
-            }
-        }
+        print("inputViewKeyboardOn:\(show)")
     }
     
     // 处理面板点击等事件

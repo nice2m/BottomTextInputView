@@ -24,12 +24,12 @@ public enum BottomTextInputViewActionType {
 
 protocol BottomTextInputViewDelegate: NSObject {
     /// 当视图展示/键盘收起时回调, keyboardwillShow = true,keyboardwillHide = false
-    /// 键盘隐藏时，可使用snp.updateConstraint 方法 重新还原控件布局，需避免使用固定高度，控件内部已经算好高度
-    /// 参考//  ViewController.swift
+    /// 该控件布局，需避免使用固定高度，控件内部已经算好高度
+    /// 使用参考//  ViewController.swift
     func inputViewKeyboardOn(show: Bool)->Void
     /// 可用于事件传递
     func inputViewOnHandle(action: BottomTextInputViewActionType)
-
+    
 }
 
 /// 位于屏幕底部、用于输入评论,发送等操作面板视图组件
@@ -206,7 +206,7 @@ private extension BottomTextInputView{
         sendBtn.addTarget(self, action: #selector(sendClicked), for: .touchUpInside)
         
         let bgGes = UITapGestureRecognizer.init(target: self, action: #selector(bgViewOnTap(sender:)))
-         bgView.addGestureRecognizer(bgGes)
+        bgView.addGestureRecognizer(bgGes)
         
         let eventForwardForbiddenGes = UITapGestureRecognizer.init(target: self, action: #selector(eventForwardForbidden))
         addGestureRecognizer(eventForwardForbiddenGes)
@@ -352,21 +352,26 @@ private extension BottomTextInputView{
            let window = self.window{
             
             isKeyboardOn = true
+            bgView(show: true)
+            
             if let aDelegate = self.delegate{
                 aDelegate.inputViewKeyboardOn(show: true)
             }
+            let targetBottomOffset = keyboardFrameValue.cgRectValue.height - window.safeAreaInsets.bottom
             
-            let keyBoardFrame = window.convert(keyboardFrameValue.cgRectValue,from:nil)
-            let targetBottomOffset = keyBoardFrame.height
+            /// 使用 view.transform 属性更新布局位置信息
+            /// 默认会开启动画，如果不使用动画，可结合
+            /*
+             UIView.performWithoutAnimation {
+             <#code#>
+             }
+             代码块使用
+             */
             
             UIView.animate(withDuration: keyboardAnimationDuration, delay: 0, options: UIView.AnimationOptions(rawValue: animationCurve) ) {
-                self.snp.updateConstraints { make in
-                    make.bottom.equalToSuperview().inset(targetBottomOffset)
-                }
-                self.superview?.layoutIfNeeded()
+                self.transform = CGAffineTransform.init(translationX: 0, y: -(targetBottomOffset))
             } completion: { finished in }
             
-            bgView(show: true)
         }
     }
     
@@ -374,6 +379,7 @@ private extension BottomTextInputView{
         isKeyboardOn = false
         bgView(show: false)
         
+        transform = .identity
         guard let delegate = delegate else { return }
         delegate.inputViewKeyboardOn(show: false)
     }
