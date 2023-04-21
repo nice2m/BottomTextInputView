@@ -1,13 +1,13 @@
 //
-//  ViewController.swift
-//  BottomInputView
+//  BottomInputViewController.swift
+//  BottomInputViewController
 //
 //  Created by nice2meet on 2023/2/27.
 //
 
 import UIKit
 
-class ViewController: UIViewController {
+class BottomInputViewController: UIViewController {
     
     var testView: BottomTextInputView? = nil
     

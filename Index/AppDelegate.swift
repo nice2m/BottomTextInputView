@@ -15,10 +15,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         window = UIWindow.init(frame: UIScreen.main.bounds)
         window?.backgroundColor = .white
-        // window?.rootViewController = ViewController()
-        window?.rootViewController = BannerController()
+
+        let vc = DemoIndexController(nibName: nil, bundle: nil)
+        let rootViewController = UINavigationController(rootViewController: vc)
+        window?.rootViewController = rootViewController
         window?.makeKeyAndVisible()
-        
         return true
     }
 
